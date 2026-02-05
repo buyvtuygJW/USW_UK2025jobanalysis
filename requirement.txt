@@ -179,7 +179,6 @@ tifffile==2026.1.14
 tinycss2==1.4.0
 tokenizers==0.22.1
 toml==0.10.2
-torch==2.9.1+cu128
 torchvision==0.24.1+cu128
 tornado==6.5.2
 tqdm==4.67.1
@@ -206,3 +205,4 @@ wheel==0.45.1
 widgetsnbextension==4.0.15
 wn==0.0.23
 wrapt==2.0.1
+#torch==2.9.1+cu128 #web page do not need BUT EDA NEED
