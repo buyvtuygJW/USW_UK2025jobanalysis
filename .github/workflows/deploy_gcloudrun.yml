@@ -10,7 +10,8 @@ jobs:
 
     env:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      REGION: ${{ secrets.GCP_REGION }}
+      REGISTRY_REGION: ${{ secrets.REGISTRY_REGION }}
+      CLOUDRUN_REGION: ${{ secrets.CLOUDRUN_REGION }}
       SERVICE: ${{ secrets.CLOUD_RUN_SERVICE }}
       REPO: ${{ secrets.ARTIFACT_REPO }}
 
@@ -30,14 +31,16 @@ jobs:
 
       - name: Build image with Cloud Build and push to Artifact Registry
         run: |
-          IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO}/${SERVICE}"
+          IMAGE="${REGISTRY_REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO}/${SERVICE}"
           gcloud builds submit --tag "$IMAGE" .
 
       - name: Deploy to Cloud Run
         run: |
-          IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO}/${SERVICE}"
+          IMAGE="${REGISTRY_REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO}/${SERVICE}"
           gcloud run deploy "${SERVICE}" \
-            --image "$IMAGE" \
-            --region "${REGION}" \
-            --platform managed \
-            --allow-unauthenticated
+          --image "$IMAGE" \
+          --region "${CLOUDRUN_REGION}" \
+          --platform managed \
+          --allow-unauthenticated
+
+
