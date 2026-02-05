@@ -95,6 +95,7 @@ st.pyplot(fig)#plt.show() just a api replace
 
 
 # macro job analaysis 
+st.subheader("-Macro job analysis-")
 
 Coltomacroanalyze="technical skill"
 skill_counts = skills_df[Coltomacroanalyze].value_counts().reset_index()
@@ -203,4 +204,5 @@ fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
 
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
