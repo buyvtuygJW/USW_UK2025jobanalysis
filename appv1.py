@@ -97,7 +97,6 @@ st.pyplot(fig)#plt.show() just a api replace
 st.subheader("-Macro job analysis-")
 
 Coltomacroanalyze="technical skill"
-skill_counts = skills_df[Coltomacroanalyze].value_counts().reset_index()
 
 toptittleforai="Artificial Intelligence"
 ai_secondaryleveltittle1="Machine Learning (All)"
@@ -159,36 +158,35 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 
-# your existing data
-counts = skill_counts.copy(deep=True)
-counts.columns = [Coltomacroanalyze, "count"]
-
-# normalize
-counts["skill_norm"] = counts[Coltomacroanalyze].str.lower()#.str.strip()
-
-# top-level category
-counts["top_category"] = np.where(
-    counts["skill_norm"].isin(AICATEGORY_MAP.keys()),
-    toptittleforai,
-    "Misc"
-)
-
-# subcategory logic
-def get_subcategory(skill):
-    if skill in AICATEGORY_MAP:
-        return AICATEGORY_MAP[skill]
-    if skill in MISC_CATEGORY_MAP:
-        return MISC_CATEGORY_MAP[skill]
-    return "Other"
-
-counts["subcategory"] = counts["skill_norm"].apply(get_subcategory)
-
-# root node
-counts["root"] = "All Skills"
-
 # treemap
 @st.cache_data
 def build_treemap(counts, Coltomacroanalyze, toptittleforai):
+    skill_counts = skills_df[Coltomacroanalyze].value_counts().reset_index()
+    counts = skill_counts.copy(deep=True)#existing data,just to prevent edit.
+    counts.columns = [Coltomacroanalyze, "count"]
+    
+    # normalize
+    counts["skill_norm"] = counts[Coltomacroanalyze].str.lower()#.str.strip()
+    
+    # top-level category
+    counts["top_category"] = np.where(
+        counts["skill_norm"].isin(AICATEGORY_MAP.keys()),
+        toptittleforai,
+        "Misc"
+    )
+    
+    # subcategory logic
+    def get_subcategory(skill):
+        if skill in AICATEGORY_MAP:
+            return AICATEGORY_MAP[skill]
+        if skill in MISC_CATEGORY_MAP:
+            return MISC_CATEGORY_MAP[skill]
+        return "Other"
+    
+    counts["subcategory"] = counts["skill_norm"].apply(get_subcategory)
+    
+    # root node
+    counts["root"] = "All Skills"
     fig = px.treemap(
         counts,
         path=["root", "top_category", "subcategory", Coltomacroanalyze],
@@ -206,6 +204,7 @@ def build_treemap(counts, Coltomacroanalyze, toptittleforai):
 fig = build_treemap(counts, Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
