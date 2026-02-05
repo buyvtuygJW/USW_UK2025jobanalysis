@@ -83,7 +83,6 @@ kiwisolver==1.4.9
 lark==1.3.1
 lazy_loader==0.4
 libclang==18.1.1
-lime==0.2.0.1
 llvmlite==0.45.1
 Markdown==3.10
 markdown-it-py==4.0.0
@@ -203,7 +202,9 @@ wheel==0.45.1
 widgetsnbextension==4.0.15
 wn==0.0.23
 wrapt==2.0.1
+
 #torch==2.9.1+cu128 #web page do not need BUT EDA NEED.tested in windows
 #torchvision==0.24.1+cu128
 #torch torchvision --index-url https://download.pytorch.org/whl/cu126
 #umap==0.1.1 #cloud deploy cannot?
+#lime==0.2.0.1
