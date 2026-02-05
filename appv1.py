@@ -51,7 +51,9 @@ def load_and_prepare_data(Coltoanalyze):
 
 skills_df, skill_counts = load_and_prepare_data(Coltoanalyze)
 #streamlit
-st.title("Skill Lookup by Group (Micro Analysis)")
+st.title("2025-2026 UK job analysis")
+
+st.subheader("-Skill Lookup by Group (Micro Analysis)")
 
 # Extract unique groups for ui
 groups = sorted(skill_counts["group"].unique())
@@ -71,7 +73,6 @@ st.dataframe(filtered)
 #plot_data = skill_counts[skill_counts["group"]==group_input].set_index(Coltoanalyze)["count"]#way1
 plot_data = ( skill_counts[skill_counts["group"] == group_input].groupby(Coltoanalyze)["count"].sum() )#should be faster way2
 
-
 # Matplotlib figure
 import matplotlib.pyplot as plt
 #way1
@@ -89,10 +90,8 @@ ax.set_xlabel("Count")
 from matplotlib.ticker import MaxNLocator
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))#forces the x-axis to use whole numbers only
 
-
 # Display in Streamlit
 st.pyplot(fig)#plt.show() just a api replace
-
 
 # macro job analaysis 
 st.subheader("-Macro job analysis-")
@@ -165,7 +164,7 @@ counts = skill_counts.copy(deep=True)
 counts.columns = [Coltomacroanalyze, "count"]
 
 # normalize
-counts["skill_norm"] = counts[Coltomacroanalyze].str.lower().str.strip()
+counts["skill_norm"] = counts[Coltomacroanalyze].str.lower()#.str.strip()
 
 # top-level category
 counts["top_category"] = np.where(
@@ -188,21 +187,25 @@ counts["subcategory"] = counts["skill_norm"].apply(get_subcategory)
 counts["root"] = "All Skills"
 
 # treemap
-fig = px.treemap(
-    counts,
-    path=["root", "top_category", "subcategory", Coltomacroanalyze],
-    values="count",
-    color="top_category",
-    color_discrete_map={
-        toptittleforai: "#4C72B0",
-        "Misc": "#55A868",
-    },
-    title="High Demand Skill Hierarchy Treemap"
-)
+@st.cache_data
+def build_treemap(counts, Coltomacroanalyze, toptittleforai):
+    fig = px.treemap(
+        counts,
+        path=["root", "top_category", "subcategory", Coltomacroanalyze],
+        values="count",
+        color="top_category",
+        color_discrete_map={
+            toptittleforai: "#4C72B0",
+            "Misc": "#55A868",
+        },
+        title="High Demand Skill Hierarchy Treemap"
+    )
+    fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
+    return fig
 
-fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
-
+fig = build_treemap(counts, Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
