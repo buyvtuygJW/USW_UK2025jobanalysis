@@ -93,3 +93,114 @@ ax.xaxis.set_major_locator(MaxNLocator(integer=True))#forces the x-axis to use w
 # Display in Streamlit
 st.pyplot(fig)#plt.show() just a api replace
 
+
+# macro job analaysis 
+
+Coltomacroanalyze="technical skill"
+skill_counts = skills_df[Coltomacroanalyze].value_counts().reset_index()
+
+toptittleforai="Artificial Intelligence"
+ai_secondaryleveltittle1="Machine Learning (All)"
+
+# AI subcategories (only for AI)
+AICATEGORY_MAP = {
+        "tensorflow": "Framework",
+        "pytorch": "Framework",
+        "scikit-learn": "Library",
+        "keras": "Library",
+    "pandas": "Library","numpy":"Library",
+    
+        "data": ai_secondaryleveltittle1,
+    "data analysis": ai_secondaryleveltittle1,
+    "data engineering": ai_secondaryleveltittle1,
+    "data management": ai_secondaryleveltittle1,
+        "nlp": ai_secondaryleveltittle1,
+        "mlops": ai_secondaryleveltittle1,
+    "deep learning": "Machine Learning",
+    "machine learning":ai_secondaryleveltittle1,
+    "generative ai": "deep learning",
+    "machine learning": ai_secondaryleveltittle1,
+    "ai": "Concept",
+    "artificial intelligence": ai_secondaryleveltittle1,
+        #"ml": "Concept",
+        "copilot": "3rd party AI",
+    "azure data factory": "3rd party AI",
+    }
+
+MISC_CATEGORY_MAP = {
+    "excel": "Productivity",
+    "power bi": "BI Tool",
+    "tableau": "BI Tool",
+    "databricks": "Data Platform",
+    "snowflake":"Data Platform",
+     "python":"Programming Languages",
+        "java":"Programming Languages",
+        "R":"Programming Languages",
+    "c#":"Programming Languages",
+    "typescript":"Programming Languages",
+    "php":"Programming Languages",
+    "kotlin":"Programming Languages",
+    "html":"Web",
+        "sql":"database",
+        "aws":"Cloud",
+        "azure":"Cloud",
+        "gcp":"Cloud",
+    "ms excel":"Office",#out of root
+    "dynamic 365":"CRM &ERP",
+    "salesforce":"CRM",
+    "kubernetes":"DevOps,Container Orchestration",
+    "docker":"DevOps,Container",
+    "react":"Library",
+    "vue":"Library",
+}
+
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+
+# your existing data
+counts = skill_counts.copy(deep=True)
+counts.columns = [Coltomacroanalyze, "count"]
+
+# normalize
+counts["skill_norm"] = counts[Coltomacroanalyze].str.lower().str.strip()
+
+# top-level category
+counts["top_category"] = np.where(
+    counts["skill_norm"].isin(AICATEGORY_MAP.keys()),
+    toptittleforai,
+    "Misc"
+)
+
+# subcategory logic
+def get_subcategory(skill):
+    if skill in AICATEGORY_MAP:
+        return AICATEGORY_MAP[skill]
+    if skill in MISC_CATEGORY_MAP:
+        return MISC_CATEGORY_MAP[skill]
+    return "Other"
+
+counts["subcategory"] = counts["skill_norm"].apply(get_subcategory)
+
+# root node
+counts["root"] = "All Skills"
+
+# treemap
+fig = px.treemap(
+    counts,
+    path=["root", "top_category", "subcategory", Coltomacroanalyze],
+    values="count",
+    color="top_category",
+    color_discrete_map={
+        toptittleforai: "#4C72B0",
+        "Misc": "#55A868",
+    },
+    title="High Demand Skill Hierarchy Treemap"
+)
+
+fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
+
+# streamlit display
+st.plotly_chart(fig, use_container_width=True)
+
