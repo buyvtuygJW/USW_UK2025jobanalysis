@@ -167,8 +167,6 @@ stack-data==0.6.3
 streamlit==1.53.1
 sympy==1.14.0
 tenacity==9.1.2
-tensorboard==2.20.0
-tensorboard-data-server==0.7.2
 termcolor==3.3.0
 terminado==0.18.1
 thinc==8.3.8
@@ -180,7 +178,6 @@ toml==0.10.2
 tornado==6.5.2
 tqdm==4.67.1
 traitlets==5.14.3
-transformers==4.57.1
 typer-slim==0.20.0
 typing-inspection==0.4.2
 typing_extensions==4.15.0
@@ -206,4 +203,6 @@ wrapt==2.0.1
 #torch torchvision --index-url https://download.pytorch.org/whl/cu126
 #umap==0.1.1 #cloud deploy cannot?
 #lime==0.2.0.1
-
+#tensorboard==2.20.0
+#tensorboard-data-server==0.7.2
+#transformers==4.57.1
