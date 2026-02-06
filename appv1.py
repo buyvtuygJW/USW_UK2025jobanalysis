@@ -165,7 +165,7 @@ import plotly.express as px
 # treemap
 @st.cache_data
 def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
-    skill_counts = skills_df[Coltomacroanalyze].value_counts().reset_index()
+    skill_counts = skills_df[Coltomacroanalyze].value_counts()#.reset_index()#try without resetindex see if the result is stilla cc and speed gain
     counts = skill_counts.copy(deep=True)#existing data,just to prevent edit.
     counts.columns = [Coltomacroanalyze, "count"]
     
@@ -208,4 +208,5 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
