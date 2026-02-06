@@ -35,7 +35,7 @@ def load_and_prepare_data(Coltoanalyze):
         "issues", "future", "advice", "input", "chain", "excellent communication",
         "engage", "overseeing", "lead & run projects", "strategic planning",
         "optimise data pipelines", "developing &", "embed", "clinicians",
-        "travel", "managing &"}
+        "travel", "managing"}
 
     skills_df["responsibility"] = skills_df["allskills"].where(skills_df["allskills"].isin(RESP_VERBS), None)
     skills_df["personal quality"] = skills_df["allskills"].where(skills_df["allskills"].isin(personalqualities))
@@ -116,22 +116,26 @@ AICATEGORY_MAP = {
         "nlp": ai_secondaryleveltittle1,
         "mlops": ai_secondaryleveltittle1,
     "deep learning": "Machine Learning",
-    "machine learning":ai_secondaryleveltittle1,
+    "rag":"Machine Learning",
+    "llm":"deep learning",
     "generative ai": "deep learning",
     "machine learning": ai_secondaryleveltittle1,
     "ai": "Concept",
+    "AI": "Concept",
     "artificial intelligence": ai_secondaryleveltittle1,
         #"ml": "Concept",
-        "copilot": "3rd party AI",
-    "azure data factory": "3rd party AI",
+    "copilot": "3rd party AI",
     }
 
 MISC_CATEGORY_MAP = {
     "excel": "Productivity",
     "power bi": "BI Tool",
     "tableau": "BI Tool",
+    "airflow":"Data Integration",
+        "azure data factory": "Data Integration",
     "databricks": "Data Platform",
     "snowflake":"Data Platform",
+    "microsoft fabric": "Data Platform",
      "python":"Programming Languages",
         "java":"Programming Languages",
         "R":"Programming Languages",
@@ -204,8 +208,4 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
-
-
-
-
 
