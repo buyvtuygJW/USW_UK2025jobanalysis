@@ -165,12 +165,12 @@ import plotly.express as px
 # treemap
 @st.cache_data
 def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
-    skill_counts = skills_df[Coltomacroanalyze].value_counts()#.reset_index()#try without resetindex see if the result is stilla cc and speed gain
+    skill_counts = skills_df[Coltomacroanalyze].value_counts().reset_index()#try without resetindex see if the result is stilla cc and speed gain.CANNOT emove reset index else throw>AttributeError: 'numpy.int64' object has no attribute 'str'  when>counts[Coltomacroanalyze].str.lower()#.str.strip()
     counts = skill_counts.copy(deep=True)#existing data,just to prevent edit.
     counts.columns = [Coltomacroanalyze, "count"]
     
     # normalize
-    counts["skill_norm"] = counts[Coltomacroanalyze].str.lower()#.str.strip()
+    counts["skill_norm"] = str(counts[Coltomacroanalyze]).lower()#.str.strip()
     
     # top-level category
     counts["top_category"] = np.where(
@@ -208,5 +208,6 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
