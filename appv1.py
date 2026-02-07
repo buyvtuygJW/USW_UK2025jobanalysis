@@ -55,8 +55,16 @@ st.title("2025-2026 UK job analysis")
 
 st.subheader("-Skill Lookup by Group (Micro Analysis)")
 
-# Extract unique groups for ui
-groups = sorted(skill_counts["group"].unique())
+# Extract unique groups for uiway1,,#groups = sorted(skill_counts["group"].unique())
+
+#way2,more ui friendly
+# grab first jobTitle per group without reset_index
+first_titles = skill_counts.groupby("group")["jobTitle"].first()
+groups = [
+    f"{grp}, {title}"
+    for grp, title in first_titles.items()
+]
+
 
 # Dropdown instead of number input
 group_input = st.selectbox(
@@ -209,6 +217,7 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
