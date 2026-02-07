@@ -122,7 +122,7 @@ AICATEGORY_MAP = {
     "machine learning": ai_secondaryleveltittle1,
     "ai": "Concept",
     "AI": "Concept",
-    "artificial intelligence": ai_secondaryleveltittle1,
+    "artificial intelligence": "machine learning",
         #"ml": "Concept",
     "copilot": "3rd party AI",
     }
@@ -170,7 +170,7 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
     counts.columns = [Coltomacroanalyze, "count"]
     
     # normalize
-    counts["skill_norm"] = str(counts[Coltomacroanalyze]).lower()#.str.strip()
+    counts["skill_norm"] = str(counts[Coltomacroanalyze]).lower().strip()#.str.strip()
     
     # top-level category
     counts["top_category"] = np.where(
@@ -208,6 +208,7 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
