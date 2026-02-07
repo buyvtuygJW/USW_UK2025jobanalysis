@@ -59,12 +59,12 @@ st.subheader("-Skill Lookup by Group (Micro Analysis)")
 
 #way2,more ui friendly
 # grab first jobTitle per group without reset_index
-first_titles = skill_counts.groupby("group")["jobTitle"].first()
-groups = [
-    f"{grp}, {title}"
-    for grp, title in first_titles.items()
-]
-
+first_titles = (
+    skill_counts.dropna(subset=["jobTitle"])
+    .groupby("group")["jobTitle"]
+    .first()
+)
+groups = [f"{grp}, {title}" for grp, title in first_titles.items()]
 
 # Dropdown instead of number input
 group_input = st.selectbox(
@@ -217,6 +217,7 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
