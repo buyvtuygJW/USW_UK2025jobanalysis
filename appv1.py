@@ -122,7 +122,7 @@ AICATEGORY_MAP = {
     "machine learning": ai_secondaryleveltittle1,
     "ai": "Concept",
     "AI": "Concept",
-    "artificial intelligence": "machine learning",
+    "artificial intelligence": "concept",
         #"ml": "Concept",
     "copilot": "3rd party AI",
     }
@@ -208,6 +208,7 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
