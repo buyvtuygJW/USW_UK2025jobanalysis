@@ -177,12 +177,12 @@ import plotly.express as px
 # treemap
 @st.cache_data
 def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
-    skill_counts = skills_df[Coltomacroanalyze].value_counts()##try without resetindex see if the result is stilla cc and speed gain
+    skill_counts = skills_df[Coltomacroanalyze].value_counts()#try without resetindex see if the result is stilla cc and speed gain
     counts = skill_counts.copy(deep=True)#existing data,just to prevent edit.
     counts.columns = [Coltomacroanalyze, "count"]
     
     # normalize
-    counts["skill_norm"] = counts[Coltomacroanalyze].str.lower()#.str.strip()#.str.lower() is a Pandas string accessor. It works on an entire Series of strings, applying .lower() element‑wise..NOT .lower() built in
+    counts["skill_norm"] = counts[Coltomacroanalyze]astype(str).str.lower()#.str.strip()#.str.lower() is a Pandas string accessor. It works on an entire Series of strings, applying .lower() element‑wise..NOT .lower() built in
     
     # top-level category
     counts["top_category"] = np.where(
@@ -217,14 +217,62 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
     fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
     return fig
 
-fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
+@st.cache_data
+def build_treemapv2(skills_df, Coltomacroanalyze, toptittleforai):
+    # Step 1: normalize skills BEFORE counting
+    skills_df[Coltomacroanalyze] = (
+        skills_df[Coltomacroanalyze]
+        .astype(str)        # force to string
+        .str.lower()        # lowercase
+        .str.strip()        # trim whitespace
+    )
+
+    # Step 2: count frequencies
+    skill_counts = skills_df[Coltomacroanalyze].value_counts().reset_index()
+    skill_counts.columns = [Coltomacroanalyze, "count"]
+
+    # Step 3: add normalized skill column (already normalized, but keep a copy)
+    skill_counts["skill_norm"] = skill_counts[Coltomacroanalyze]
+
+    # Step 4: top-level category
+    skill_counts["top_category"] = np.where(
+        skill_counts["skill_norm"].isin(AICATEGORY_MAP.keys()),
+        toptittleforai,
+        "Misc"
+    )
+
+    # Step 5: subcategory logic
+    def get_subcategory(skill):
+        if skill in AICATEGORY_MAP:
+            return AICATEGORY_MAP[skill]
+        if skill in MISC_CATEGORY_MAP:
+            return MISC_CATEGORY_MAP[skill]
+        return "Other"
+
+    skill_counts["subcategory"] = skill_counts["skill_norm"].apply(get_subcategory)
+
+    # Step 6: root node
+    skill_counts["root"] = "All Skills"
+
+    # Step 7: build treemap
+    fig = px.treemap(
+        skill_counts,
+        path=["root", "top_category", "subcategory", Coltomacroanalyze],
+        values="count",
+        color="top_category",
+        color_discrete_map={
+            toptittleforai: "#4C72B0",
+            "Misc": "#55A868",
+        },
+        title="High Demand Skill Hierarchy Treemap"
+    )
+    fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
+    return fig
+
+
+fig = build_treemapv2(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
-
-
-
-
-
 
 
 
