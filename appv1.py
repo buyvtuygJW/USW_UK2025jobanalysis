@@ -217,9 +217,11 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
     fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
     return fig
 
-@st.cache_data
+
 import numpy as np
 import plotly.express as px
+
+@st.cache_data
 def build_treemapv2(skills_df, Coltomacroanalyze, toptittleforai):
     # Normalize the column you want to analyze
     skills_df[Coltomacroanalyze] = (
@@ -273,6 +275,7 @@ def build_treemapv2(skills_df, Coltomacroanalyze, toptittleforai):
 fig = build_treemapv2(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
