@@ -69,7 +69,7 @@ groups = [f"{grp}, {title}" for grp, title in first_titles.items()]
 # Dropdown instead of number input
 #group_input = st.selectbox("Choose a group",options=groups,index=groups.index(303) if 303 in groups else 0)#way1 ui to logic
 
-group_choice = st.selectbox("Choose a group",options=groups,index=groups.index("-1 ,misll") if "-1 ,misll" in groups else -1)
+group_choice = st.selectbox("Choose a group",options=groups,index=groups.index("-1 ,misll") if "-1 ,misll" in groups else 0)
 
 # split on comma, take the first part, cast to int
 group_input = int(group_choice.split(",")[0])
@@ -220,6 +220,7 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
