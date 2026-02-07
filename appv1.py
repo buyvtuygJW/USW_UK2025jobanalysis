@@ -218,30 +218,29 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
     return fig
 
 @st.cache_data
+import numpy as np
+import plotly.express as px
 def build_treemapv2(skills_df, Coltomacroanalyze, toptittleforai):
-    # Step 1: normalize skills BEFORE counting
+    # Normalize the column you want to analyze
     skills_df[Coltomacroanalyze] = (
         skills_df[Coltomacroanalyze]
-        .astype(str)        # force to string
-        .str.lower()        # lowercase
-        .str.strip()        # trim whitespace
+        .astype(str)
+        .str.lower()
+        .str.strip()
     )
 
-    # Step 2: count frequencies
+    # Count frequencies
     skill_counts = skills_df[Coltomacroanalyze].value_counts().reset_index()
     skill_counts.columns = [Coltomacroanalyze, "count"]
 
-    # Step 3: add normalized skill column (already normalized, but keep a copy)
-    skill_counts["skill_norm"] = skill_counts[Coltomacroanalyze]
-
-    # Step 4: top-level category
+    # Top-level category
     skill_counts["top_category"] = np.where(
-        skill_counts["skill_norm"].isin(AICATEGORY_MAP.keys()),
+        skill_counts[Coltomacroanalyze].isin(AICATEGORY_MAP.keys()),
         toptittleforai,
         "Misc"
     )
 
-    # Step 5: subcategory logic
+    # Subcategory logic
     def get_subcategory(skill):
         if skill in AICATEGORY_MAP:
             return AICATEGORY_MAP[skill]
@@ -249,12 +248,12 @@ def build_treemapv2(skills_df, Coltomacroanalyze, toptittleforai):
             return MISC_CATEGORY_MAP[skill]
         return "Other"
 
-    skill_counts["subcategory"] = skill_counts["skill_norm"].apply(get_subcategory)
+    skill_counts["subcategory"] = skill_counts[Coltomacroanalyze].apply(get_subcategory)
 
-    # Step 6: root node
+    # Root node
     skill_counts["root"] = "All Skills"
 
-    # Step 7: build treemap
+    # Build treemap
     fig = px.treemap(
         skill_counts,
         path=["root", "top_category", "subcategory", Coltomacroanalyze],
@@ -270,9 +269,11 @@ def build_treemapv2(skills_df, Coltomacroanalyze, toptittleforai):
     return fig
 
 
+
 fig = build_treemapv2(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
