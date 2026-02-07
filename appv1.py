@@ -57,6 +57,7 @@ st.subheader("-Skill Lookup by Group (Micro Analysis)")
 
 # Extract unique groups for ui
 groups = sorted(skill_counts["group"].unique())
+
 # Dropdown instead of number input
 group_input = st.selectbox(
     "Choose a group",
@@ -170,7 +171,7 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
     counts.columns = [Coltomacroanalyze, "count"]
     
     # normalize
-    counts["skill_norm"] = str(counts[Coltomacroanalyze]).astype(str).str.lower()#.str.strip()#.str.lower() is a Pandas string accessor. It works on an entire Series of strings, applying .lower() element‑wise..NOT .lower() built in
+    counts["skill_norm"] = counts[Coltomacroanalyze].astype(str).str.lower()#.str.strip()#.str.lower() is a Pandas string accessor. It works on an entire Series of strings, applying .lower() element‑wise..NOT .lower() built in
     
     # top-level category
     counts["top_category"] = np.where(
@@ -208,6 +209,7 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
 fig = build_treemap(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
