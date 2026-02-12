@@ -271,21 +271,17 @@ def build_treemapv2(skills_df, Coltomacroanalyze, toptittleforai):
     fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
     return fig
 
-
-
 fig = build_treemapv2(skills_df,Coltomacroanalyze, toptittleforai)
 # streamlit display
 st.plotly_chart(fig, use_container_width=True)
 
+import streamlit as st
 
-
-
-
-
-
-
-
-
-
-
-
+st.markdown(
+    """
+    <div style='text-align: center; font-size: 14px; opacity: 0.7; margin-top: 40px;'>
+        Built by <a href="www.linkedin.com/in/lim-jw2025/" target="_blank">LJW</a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
