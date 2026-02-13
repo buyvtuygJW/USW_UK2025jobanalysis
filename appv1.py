@@ -77,10 +77,11 @@ group_input = int(group_choice.split(",")[0])
 st.subheader("Results")
 
 if st.button("Merge same jobTitle"):# button to merge rows
-    midmicrofiltered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]].fillna("")
+    midmicrofiltered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]]
     midmicrofiltered["technical skill"]=midmicrofiltered["technical skill"].fillna("")
-    import numpy
-    midmicrofiltered["salary"]=midmicrofiltered["salary"].replace({None: numpy.nan}).astype(float)
+    #import numpy#ai initial suggest,broken
+    #midmicrofiltered["salary"]=midmicrofiltered["salary"].replace({None: numpy.nan}).astype(float)
+    midmicrofiltered["salary"] = ( pd.to_numeric(midmicrofiltered["salary"].str.replace(r'[\$£₤,]', '', regex=True), errors="coerce") )
     merged = (midmicrofiltered
         .groupby("jobTitle", as_index=False)
         .agg({
@@ -90,7 +91,7 @@ if st.button("Merge same jobTitle"):# button to merge rows
     )
     st.dataframe(merged)
 else:
-    filtered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill"]]
+    filtered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]]
     st.dataframe(filtered)
 
 
