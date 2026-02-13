@@ -81,12 +81,13 @@ if st.button("Merge same jobTitle"):# button to merge rows
     midmicrofiltered["technical skill"]=midmicrofiltered["technical skill"].fillna("")
     #import numpy#ai initial suggest,broken
     #midmicrofiltered["salary"]=midmicrofiltered["salary"].replace({None: numpy.nan}).astype(float)
-    midmicrofiltered["salary"] = ( pd.to_numeric(midmicrofiltered["salary"].str.replace(r'[\$£₤,]', '', regex=True), errors="coerce") )
+    #midmicrofiltered["salary"] = ( pd.to_numeric(midmicrofiltered["salary"].str.replace(r'[\$£₤,]', '', regex=True), errors="coerce") )
     merged = (midmicrofiltered
         .groupby("jobTitle", as_index=False)
         .agg({
             "technical skill": lambda x: ", ".join(sorted(set(x))),  # merge unique skills
-            "salary": "mean"  # average salary
+            #"salary": "mean"  # average salary
+            "salary": lambda x: ", ".join(sorted(set(x))),  # merge unique skills
         })
     )
     st.dataframe(merged)
