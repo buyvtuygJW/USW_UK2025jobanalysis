@@ -72,12 +72,27 @@ group_choice = st.selectbox("Choose a group",options=groups,index=groups.index("
 
 # split on comma, take the first part, cast to int
 group_input = int(group_choice.split(",")[0])
-# Filter selected group
+# Filter selected group(shared across ways)
 filtered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]]
 
-# Show results
 st.subheader("Results")
-st.dataframe(filtered)
+
+if st.button("Merge rows with same jobTitle"):# button to merge rows
+    merged = (filtered
+        .groupby("jobTitle", as_index=False)
+        .agg({
+            "technical skill": lambda x: ", ".join(sorted(set(x))),  # merge unique skills
+            "salary": "mean"  # average salary
+        })
+    )
+    st.dataframe(merged)
+else:
+    st.dataframe(filtered)
+
+
+# Show results(v1,simple)
+#st.subheader("Results")
+#st.dataframe(filtered)
 
 #plot_data = skill_counts[skill_counts["group"]==group_input].set_index(Coltoanalyze)["count"]#way1
 plot_data = ( skill_counts[skill_counts["group"] == group_input].groupby(Coltoanalyze)["count"].sum() )#should be faster way2
