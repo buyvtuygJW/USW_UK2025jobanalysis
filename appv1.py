@@ -79,7 +79,8 @@ st.subheader("Results")
 if st.button("Merge rows with same jobTitle"):# button to merge rows
     midmicrofiltered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]].fillna("")
     midmicrofiltered["technical skill"]=midmicrofiltered["technical skill"].fillna("")
-    midmicrofiltered["salary"]=midmicrofiltered["salary"].fillna(0)
+    import numpy
+    midmicrofiltered["salary"]=midmicrofiltered["salary"].replace({None: numpy.nan}).astype(float)
     merged = (midmicrofiltered
         .groupby("jobTitle", as_index=False)
         .agg({
