@@ -80,7 +80,7 @@ if st.button("Merge rows with same jobTitle"):# button to merge rows
     midmicrofiltered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]].fillna("")
     midmicrofiltered["technical skill"]=midmicrofiltered["technical skill"].fillna("")
     midmicrofiltered["salary"]=midmicrofiltered["salary"].fillna(0)
-    merged = (filtered
+    merged = (midmicrofiltered
         .groupby("jobTitle", as_index=False)
         .agg({
             "technical skill": lambda x: ", ".join(sorted(set(x))),  # merge unique skills
