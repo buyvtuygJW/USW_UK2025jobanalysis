@@ -73,11 +73,13 @@ group_choice = st.selectbox("Choose a group",options=groups,index=groups.index("
 # split on comma, take the first part, cast to int
 group_input = int(group_choice.split(",")[0])
 # Filter selected group(shared across ways)
-filtered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]]
 
 st.subheader("Results")
 
 if st.button("Merge rows with same jobTitle"):# button to merge rows
+    midmicrofiltered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]].fillna("")
+    midmicrofiltered["technical skill"]=midmicrofiltered["technical skill"].fillna("")
+    midmicrofiltered["salary"]=midmicrofiltered["salary"].fillna(0)
     merged = (filtered
         .groupby("jobTitle", as_index=False)
         .agg({
@@ -87,6 +89,7 @@ if st.button("Merge rows with same jobTitle"):# button to merge rows
     )
     st.dataframe(merged)
 else:
+    filtered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill"]]
     st.dataframe(filtered)
 
 
