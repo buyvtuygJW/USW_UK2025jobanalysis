@@ -55,10 +55,10 @@ st.title("2025-2026 UK job analysis")
 
 st.subheader("-Skill Lookup by Group (Micro Analysis)")
 
-# Extract unique groups for uiway1,,#groups = sorted(skill_counts["group"].unique())
+# Extract unique groups for ui
+#way1,groups = sorted(skill_counts["group"].unique())
 
-#way2,more ui friendly
-# grab first jobTitle per group without reset_index
+#way2,more ui friendly.grab first jobTitle per group without reset_index
 first_titles = (
     skill_counts.dropna(subset=["jobTitle"])
     .groupby("group")["jobTitle"]
@@ -66,17 +66,14 @@ first_titles = (
 )
 groups = [f"{grp}, {title}" for grp, title in first_titles.items()]
 
-# Dropdown instead of number input
+# Dropdown instead of number input,2 way
 #group_input = st.selectbox("Choose a group",options=groups,index=groups.index(303) if 303 in groups else 0)#way1 ui to logic
-
 group_choice = st.selectbox("Choose a group",options=groups,index=groups.index("-1 ,misll") if "-1 ,misll" in groups else 0)
 
 # split on comma, take the first part, cast to int
 group_input = int(group_choice.split(",")[0])
-
-
-# Filter
-filtered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill"]]
+# Filter selected group
+filtered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]]
 
 # Show results
 st.subheader("Results")
@@ -104,6 +101,9 @@ ax.xaxis.set_major_locator(MaxNLocator(integer=True))#forces the x-axis to use w
 
 # Display in Streamlit
 st.pyplot(fig)#plt.show() just a api replace
+
+#section2,job salary analysis relation to job
+
 
 # macro job analaysis 
 st.subheader("-Macro job analysis-")
@@ -180,8 +180,6 @@ def build_treemap(skills_df,Coltomacroanalyze, toptittleforai):
     skill_counts = skills_df[Coltomacroanalyze].value_counts()#try without resetindex see if the result is stilla cc and speed gain
     counts = skill_counts.copy(deep=True)#existing data,just to prevent edit.
     counts.columns = [Coltomacroanalyze, "count"]
-
-    
     
     # normalize
     counts["skill_norm"] = counts[Coltomacroanalyze].drop("none").str.lower()#.str.strip()#.str.lower() is a Pandas string accessor. It works on an entire Series of strings, applying .lower() element‑wise..NOT .lower() built in
