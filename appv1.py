@@ -82,6 +82,8 @@ if st.button("Merge same jobTitle"):# button to merge rows
     #import numpy#ai initial suggest,broken
     #midmicrofiltered["salary"]=midmicrofiltered["salary"].replace({None: numpy.nan}).astype(float)
     #midmicrofiltered["salary"] = ( pd.to_numeric(midmicrofiltered["salary"].str.replace(r'[\$£₤,]', '', regex=True), errors="coerce") )
+
+    midmicrofiltered["salary"]=midmicrofiltered["salary"].fillna("")
     merged = (midmicrofiltered
         .groupby("jobTitle", as_index=False)
         .agg({
