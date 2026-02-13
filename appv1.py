@@ -76,7 +76,7 @@ group_input = int(group_choice.split(",")[0])
 
 st.subheader("Results")
 
-if st.button("Merge rows with same jobTitle"):# button to merge rows
+if st.button("Merge same jobTitle"):# button to merge rows
     midmicrofiltered = skills_df[skills_df["group"] == group_input][["jobTitle", "technical skill","salary"]].fillna("")
     midmicrofiltered["technical skill"]=midmicrofiltered["technical skill"].fillna("")
     import numpy
